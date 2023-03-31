@@ -50,7 +50,6 @@ def handle_message(data):
     # Farnam Street Reply
     if room == "farnam":
         reply = generate_farnam_reply(data["text"])
-        print(reply)
 
         # Save Farnam Reply in DB
         datetime_field = datetime.strptime(reply["datetime"], "%Y-%m-%d %H:%M:%S.%f")
