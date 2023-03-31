@@ -1,13 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
-example = {
-    "id": "1",
-    "user": "Me",
-    "text": "Ahoj, toto je dummy zpráva",
-    "room": "room1",
-    "datetime": "2022-12-27 08:26:49.219717",
-}
-
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -26,3 +18,10 @@ class Message(db.Model):
 
     def __repr__(self):
         return f"<Message {self.id} - {self.text} by {self.user} in {self.room} at {self.datetime}>"
+
+    @classmethod
+    def save_message_to_db(cls, message):
+        datetime_field = datetime.strptime(message["datetime"], "%Y-%m-%d %H:%M:%S.%f")
+        new_message = cls(user=message["user"], text=message["text"], room=message["room"], datetime=datetime_field)
+        db.session.add(new_message)
+        db.session.commit()
