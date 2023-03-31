@@ -47,31 +47,25 @@ const Main = ({ selectedRoom }) => {
     const newSocket = io('http://localhost:5001');
     setSocket(newSocket);
 
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.on('all_messages', (data) => {
-      setMessages(data);
-    });
-
     const handleNewMessage = (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
       setIsLoading(false);
     };
-    socket.on('farnam_reply', handleNewMessage);
-    socket.on('data', handleNewMessage);
+
+    newSocket.on('all_messages', (data) => {
+      setMessages(data);
+    });
+
+    newSocket.on('farnam_reply', handleNewMessage);
+    newSocket.on('data', handleNewMessage);
 
     return () => {
-      socket.off('farnam_reply', handleNewMessage);
-      socket.off('data', handleNewMessage);
-      socket.off('all_messages');
+      newSocket.off('farnam_reply', handleNewMessage);
+      newSocket.off('data', handleNewMessage);
+      newSocket.off('all_messages');
+      newSocket.disconnect();
     };
-  }, [socket]);
+  }, []);
 
   const filteredMessages = selectedRoom
     ? messages.filter((message) => message.room === selectedRoom)
