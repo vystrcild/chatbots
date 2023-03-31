@@ -3,8 +3,6 @@ import { io } from "socket.io-client";
 import ChatInput from './ChatInput';
 import MessageList from "./MessageList"
 
-const socket = io("http://localhost:5001");
-
 
 function formatDateTime(date) {
   const year = date.getFullYear();
@@ -22,59 +20,69 @@ function formatDateTime(date) {
 const Main = ({ selectedRoom }) => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   const handleSendMessage = (text) => {
+    if (!socket) return;
+
     const newMessage = {
-      user: "Me",
+      user: 'Me',
       text: text,
       room: selectedRoom,
       datetime: formatDateTime(new Date()),
     };
     setMessages([...messages, newMessage]);
 
-    socket.emit("message", {
+    socket.emit('message', {
       user: newMessage.user,
       text: newMessage.text,
       room: newMessage.room,
       datetime: newMessage.datetime,
     });
 
-    // Set isLoading to true when waiting for a reply from any room
     setIsLoading(true);
   };
 
   useEffect(() => {
-    // Fetch all messages from the server
-    socket.on("all_messages", (data) => {
-    setMessages(data);
+    const newSocket = io('http://localhost:5001');
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on('all_messages', (data) => {
+      setMessages(data);
     });
 
-
     const handleNewMessage = (data) => {
-      setMessages(prevMessages => [...prevMessages, data]);
-      setIsLoading(false); // Set isLoading to false when the reply is received
+      setMessages((prevMessages) => [...prevMessages, data]);
+      setIsLoading(false);
     };
     socket.on('farnam_reply', handleNewMessage);
-    // Listen for the 'data' event, which is emitted for replies from all rooms
     socket.on('data', handleNewMessage);
 
     return () => {
       socket.off('farnam_reply', handleNewMessage);
-      socket.off("all_messages");
+      socket.off('data', handleNewMessage);
+      socket.off('all_messages');
     };
-  }, []);
+  }, [socket]);
 
   const filteredMessages = selectedRoom
     ? messages.filter((message) => message.room === selectedRoom)
     : messages;
 
-
   return (
     <div className="w-full h-full flex flex-col">
-        <MessageList messages={filteredMessages} isLoading={isLoading} />
-        <ChatInput onSendMessage={handleSendMessage} />
-      </div>
-  )
-}
+      <MessageList messages={filteredMessages} isLoading={isLoading} />
+      <ChatInput onSendMessage={handleSendMessage} />
+    </div>
+  );
+};
 
-export default Main
+export default Main;
