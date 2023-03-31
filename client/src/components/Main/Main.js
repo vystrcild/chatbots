@@ -44,11 +44,9 @@ const Main = ({ selectedRoom }) => {
       setMessages(data);
     });
 
-    newSocket.on('farnam_reply', handleNewMessage);
     newSocket.on('data', handleNewMessage);
 
     return () => {
-      newSocket.off('farnam_reply', handleNewMessage);
       newSocket.off('data', handleNewMessage);
       newSocket.off('all_messages');
       newSocket.disconnect();

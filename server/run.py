@@ -47,16 +47,17 @@ def handle_message(data):
     # Save Message in DB
     save_message_to_db(data["user"], data["text"], data["room"], datetime_field)
 
-
     # Farnam Street Reply
     if room == "farnam":
         reply = generate_farnam_reply(data["text"])
+        print(reply)
 
         # Save Farnam Reply in DB
         datetime_field = datetime.strptime(reply["datetime"], "%Y-%m-%d %H:%M:%S.%f")
         save_message_to_db(reply["user"], reply["text"], reply["room"], datetime_field)
 
-        emit("farnam_reply", reply)
+        emit("data", reply)
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5001)
