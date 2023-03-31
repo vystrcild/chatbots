@@ -31,7 +31,7 @@ def connected():
 def handle_message(data):
     """event listener when client types a message"""
     print(f"data from the front end: {data}")
-    emit("data",{'data':data,'id':request.sid},broadcast=True)
+    emit("data",{'data':data,'id':request.sid})
 
     # Save Message in DB
     Message.save_message_to_db(data)
