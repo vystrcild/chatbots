@@ -39,10 +39,10 @@ const Message = ({ user, text, datetime }) => {
 
       <div className='flex flex-col space-y-2 w-full'>
       <div className="flex flex-row items-baseline justify-between">
-        <p className={`font-medium ${messageClass}`}>{user}</p>
+        <p className={`font-medium text-sm ${messageClass}`}>{user}</p>
         <p className="text-xs text-bglight">{formattedDatetime}</p>
       </div>
-      <p className="text-sm text-justify whitespace-pre-wrap">{text}</p>
+      <p className="text-xs text-justify whitespace-pre-wrap">{text}</p>
     </div>
     </div>
     </div>

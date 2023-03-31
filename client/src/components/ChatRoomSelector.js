@@ -19,7 +19,7 @@ const ChatRoomSelector = ({ selectedRoom, onSelectRoom }) => {
       <ul className="mt-4">
         {rooms.map((room) => (
           <li key={room.id}>
-            <div className='p-2 m-2 rounded-md border border-bglight text-sm'>
+            <div className='p-2 m-2 rounded-md border border-bglight text-xs'>
             <a
               className={`${
                 room.id === selectedRoom ? 'text-primary' : 'text-white'
