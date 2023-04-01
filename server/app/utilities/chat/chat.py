@@ -20,11 +20,12 @@ prompt = PromptTemplate(
 chatgpt_chain = LLMChain(
     llm=OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY),
     prompt=prompt,
-    verbose=True,
+    verbose=False,
     memory=ConversationBufferWindowMemory(k=2),
 )
 
 chatgpt_chain.predict(human_input="Hello, how are you?")
 output = chatgpt_chain.predict(human_input="Who I am?")
 
-print(output)
+print(output.lstrip())
+print(chatgpt_chain.get_num_tokens("AHOJ"))

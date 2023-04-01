@@ -15,6 +15,7 @@ const Main = ({ selectedRoom }) => {
 
     const newMessage = {
       user: 'Me',
+      type: 'human',
       text: text,
       room: selectedRoom,
       datetime: formatDateTime(new Date()),
@@ -23,6 +24,7 @@ const Main = ({ selectedRoom }) => {
 
     socket.emit('message', {
       user: newMessage.user,
+      type: newMessage.type,
       text: newMessage.text,
       room: newMessage.room,
       datetime: newMessage.datetime,

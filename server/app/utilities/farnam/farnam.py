@@ -25,6 +25,7 @@ def generate_farnam_reply(text):
     result = chain(text)
     reply = {
         "user": "Farnam Street",
+        "type": "ai",
         "text": str(result["result"]).lstrip(),
         "datetime": str(datetime.now()),
         "room": "farnam"
