@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ChatRoomSelector from './ChatRoomSelector';
 
 const Sidebar = ({ onRoomSelect, selectedRoom }) => {

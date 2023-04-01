@@ -59,15 +59,13 @@ const Main = ({ selectedRoom }) => {
     ? messages.filter((message) => message.room === selectedRoom)
     : messages;
 
-  const clearChat = () => {
-    socket.emit("clear_room", selectedRoom);
-  };
+
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-8/12 h-full flex flex-col">
       <MessageList messages={filteredMessages} isLoading={isLoading} />
       <ChatInput onSendMessage={handleSendMessage} />
-      <button onClick={clearChat}>Clear</button>
+
     </div>
   );
 };

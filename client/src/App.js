@@ -16,7 +16,7 @@ function App() {
       <div className="font-vietnam flex h-screen">
       <Sidebar selectedRoom={selectedRoom} onRoomSelect={handleRoomSelect} />
       <Main selectedRoom={selectedRoom} />
-      {/* <Settings /> */}
+      <Settings selectedRoom={selectedRoom}/>
     </div>
     </>
   )
