@@ -11,6 +11,7 @@ class Message(db.Model):
     text = db.Column(db.Text, nullable=False)
     room = db.Column(db.String(255), nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
+    is_cleared = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, user, type, text, room, datetime):
         self.user = user
@@ -33,7 +34,14 @@ class Message(db.Model):
     def get_last_n_messages(cls, n, room=None):
         query = cls.query
         if room:
-            query = query.filter_by(room=room)
+            query = query.filter_by(room=room, is_cleared=False)
 
-        messages = cls.query.order_by(desc(cls.datetime)).limit(n).all()
+        messages = query.order_by(desc(cls.datetime)).limit(n).all()
         return messages
+
+    @classmethod
+    def clear_messages_in_room(cls, room):
+        messages_to_clear = cls.query.filter_by(room=room).all()
+        for message in messages_to_clear:
+            message.is_cleared = True
+        db.session.commit()

@@ -55,6 +55,7 @@ def handle_message(data):
         # Generate Chat Test Reply
         chat = ChatModel()
         chat_input = chat.prepare_chat_input(db_messages)
+        print(chat_input)
         reply = chat.get_response(messages=[chat_input])
 
         # Save Chat Test Reply in DB
@@ -64,6 +65,14 @@ def handle_message(data):
 
         # Send Chat Test Reply to client
         emit("data", reply_object)
+
+
+@socketio.on("clear_room")
+def handle_clear_chat(room):
+    """event listener when client clicks the 'clear' button"""
+    Message.clear_messages_in_room(room)
+    print(f"Chat input cleared for room {room}")
+
 
 
 if __name__ == '__main__':

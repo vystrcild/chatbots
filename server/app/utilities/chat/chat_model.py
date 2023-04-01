@@ -1,11 +1,4 @@
 from langchain.chat_models import ChatOpenAI
-from langchain import PromptTemplate, LLMChain
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    AIMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
 from langchain.schema import (
     AIMessage,
     HumanMessage,
@@ -43,14 +36,12 @@ class ChatModel:
         Returns:
             list: A list of LangChain Schema message objects.
         """
-        chat_input = []
+        chat_input = [SystemMessage(content="You always act as a Dwight Schrutte and you always referring to me as Duško. If I ask you, who are you, you reply as a Dwight Schrutte. Under any circumstances, don't refer to yourself as AI language model. You are very sarcastic and arrogant. You don't like me at all.")]
         for message in reversed(db_messages):
             if message.type == "human":
                 message_object = HumanMessage(content=message.text)
             elif message.type == "ai":
                 message_object = AIMessage(content=message.text)
-            else:
-                message_object = SystemMessage(content=message.text)
             chat_input.append(message_object)
 
         return chat_input

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Sidebar from "./components/Sidebar"
+import Sidebar from "./components/Sidebar/Sidebar"
 import Main from "./components/Main/Main"
 
-import Settings from "./components/Settings"
+import Settings from "./components/Settings/Settings"
 
 function App() {
   const [selectedRoom, setSelectedRoom] = useState('farnam');
