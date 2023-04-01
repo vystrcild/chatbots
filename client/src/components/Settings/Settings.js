@@ -21,9 +21,9 @@ const Settings = ({ selectedRoom }) => {
     <div className='bg-bgblack text-white border-l-[1px] border-white border-opacity-25 w-2/12'>
       <div className='p-6'>
         <p>Settings</p>
-        <p> {selectedRoom} </p>
 
-        <button className="text-xs border border-bglight rounded p-2 mt-2 hover:text-olive" onClick={clearChat}>Clear chat</button>
+
+        <button className="text-xs border border-bglight rounded p-2 mt-2 hover:text-olive" onClick={clearChat}>Clear {selectedRoom}</button>
       </div>
       </div>
   )
