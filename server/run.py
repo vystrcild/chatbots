@@ -7,13 +7,7 @@ from app.config import Config
 from app.models.messages import Message
 from app.utilities.message_utils import create_message_payload
 from app.utilities.farnam.farnam import generate_farnam_reply
-from app.utilities.chat.chat_model import Chat
-
-from langchain.schema import (
-    AIMessage,
-    HumanMessage,
-    SystemMessage
-)
+from app.utilities.chat.chat_model import ChatModel
 
 app = create_app(Config)
 CORS(app,resources={r"/*":{"origins":"*"}})
@@ -36,7 +30,7 @@ def connected():
 
 @socketio.on('message')
 def handle_message(data):
-    """event listener when client types a message"""
+    """Event listener when client sends a message."""
     print(f"data from the front end: {data}")
     emit("data",{'data':data,'id':request.sid})
 
@@ -59,7 +53,7 @@ def handle_message(data):
             db_messages = Message.get_last_n_messages(5, room=data["room"])
 
         # Generate Chat Test Reply
-        chat = Chat()
+        chat = ChatModel()
         chat_input = chat.prepare_chat_input(db_messages)
         reply = chat.get_response(messages=[chat_input])
 

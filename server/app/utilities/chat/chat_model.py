@@ -26,13 +26,23 @@ messages = [[
     HumanMessage(content="Why? :("),
 ]]
 
-class Chat:
+class ChatModel:
     def __init__(self, temperature=0.4, model_name="gpt-3.5-turbo"):
+        """Initialize the Chat class."""
         self.temperature = temperature
         self.model_name = model_name
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
 
     def prepare_chat_input(self, db_messages):
+        """
+        Prepare chat input from a list of database messages.
+
+        Args:
+            db_messages (list): A list of database message objects.
+
+        Returns:
+            list: A list of LangChain Schema message objects.
+        """
         chat_input = []
         for message in reversed(db_messages):
             if message.type == "human":
@@ -46,6 +56,15 @@ class Chat:
         return chat_input
 
     def get_response(self, messages=[]):
+        """
+        Generate a response using the ChatOpenAI model.
+
+        Args:
+            messages (list): A list of LangChain message objects.
+
+        Returns:
+            dict: A dictionary containing the response message object, response text, and total tokens.
+        """
         chat = ChatOpenAI(temperature=self.temperature, openai_api_key=self.openai_api_key, model_name=self.model_name)
         response = chat.generate(messages)
         response_message_object = response.generations[0][0].message
@@ -59,6 +78,15 @@ class Chat:
         }
 
     def generate_chat_reply(self, text):
+        """
+        Generate a chat reply object.
+
+        Args:
+            text (str): The text of the reply.
+
+        Returns:
+            dict: A dictionary representing the chat reply object.
+        """
         reply = {
             "user": "OpenAI Chat",
             "type": "ai",
