@@ -73,6 +73,10 @@ def handle_clear_chat(room):
     Message.clear_messages_in_room(room)
     print(f"Chat input cleared for room {room}")
 
+@socketio.on("settings")
+def handle_settings(data):
+    """event listener when client clicks the 'settings' button"""
+    print(f"Settings: {data}")
 
 
 if __name__ == '__main__':
