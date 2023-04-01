@@ -5,6 +5,7 @@ from flask_cors import CORS
 from app import create_app
 from app.config import Config
 from app.models.messages import Message
+from app.models.rooms import Room
 from app.utilities.message_utils import create_message_payload
 from app.utilities.farnam.farnam import generate_farnam_reply
 from app.utilities.chat.chat_model import ChatModel
@@ -12,7 +13,6 @@ from app.utilities.chat.chat_model import ChatModel
 app = create_app(Config)
 CORS(app,resources={r"/*":{"origins":"*"}})
 socketio = SocketIO(app,cors_allowed_origins="*")
-
 
 @socketio.on("connect")
 def connected():

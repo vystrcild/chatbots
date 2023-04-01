@@ -1,5 +1,7 @@
 from flask import Flask
-from app.models.messages import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 def create_app(config_object):
     app = Flask(__name__)
