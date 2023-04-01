@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import CheckConstraint
+from sqlalchemy import CheckConstraint, desc
 from datetime import datetime
 
 db = SQLAlchemy()
@@ -28,3 +28,8 @@ class Message(db.Model):
         new_message = cls(user=message["user"], type=message["type"], text=message["text"], room=message["room"], datetime=datetime_field)
         db.session.add(new_message)
         db.session.commit()
+
+    @classmethod
+    def get_last_n_messages(cls, n):
+        messages = cls.query.order_by(desc(cls.datetime)).limit(n).all()
+        return messages

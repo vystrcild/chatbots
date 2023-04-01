@@ -11,6 +11,7 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 
@@ -39,3 +40,13 @@ def chat_model(temperature=0.4, model_name="gpt-3.5-turbo", messages=[]):
         "response_text": response_text,
         "total_tokens": total_tokens
     }
+
+def generate_chat_reply(text):
+    reply = {
+        "user": "OpenAI Chat",
+        "type": "ai",
+        "text": str(text.lstrip()),
+        "datetime": str(datetime.now()),
+        "room": "chat_test"
+    }
+    return reply
