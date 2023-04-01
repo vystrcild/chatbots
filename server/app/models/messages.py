@@ -30,6 +30,10 @@ class Message(db.Model):
         db.session.commit()
 
     @classmethod
-    def get_last_n_messages(cls, n):
+    def get_last_n_messages(cls, n, room=None):
+        query = cls.query
+        if room:
+            query = query.filter_by(room=room)
+
         messages = cls.query.order_by(desc(cls.datetime)).limit(n).all()
         return messages

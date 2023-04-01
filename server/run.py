@@ -7,7 +7,7 @@ from app.config import Config
 from app.models.messages import Message
 from app.utilities.message_utils import create_message_payload
 from app.utilities.farnam.farnam import generate_farnam_reply
-from app.utilities.chat.chat_model import chat_model, generate_chat_reply
+from app.utilities.chat.chat_model import Chat
 
 from langchain.schema import (
     AIMessage,
@@ -56,31 +56,20 @@ def handle_message(data):
     if data["room"] == "chat_test":
         # Download last 5 messages from DB
         with app.app_context():
-            db_messages = Message.get_last_n_messages(5)
-
-        # Transform messages as LangChain Message objects
-        chat_input = []
-        # Iterate in reverse order to get the most recent messages first
-        for message in reversed(db_messages):
-            if message.type == "human":
-                message_object = HumanMessage(content=message.text)
-            elif message.type == "ai":
-                message_object = AIMessage(content=message.text)
-            else:
-                message_object = SystemMessage(content=message.text)
-            chat_input.append(message_object)
+            db_messages = Message.get_last_n_messages(5, room=data["room"])
 
         # Generate Chat Test Reply
-        reply = chat_model(messages=[chat_input])
+        chat = Chat()
+        chat_input = chat.prepare_chat_input(db_messages)
+        reply = chat.get_response(messages=[chat_input])
 
         # Save Chat Test Reply in DB
         reply_text = reply["response_text"]
-        reply_object = generate_chat_reply(reply_text)
+        reply_object = chat.generate_chat_reply(reply_text)
         Message.save_message_to_db(reply_object)
 
+        # Send Chat Test Reply to client
         emit("data", reply_object)
-
-
 
 
 if __name__ == '__main__':
